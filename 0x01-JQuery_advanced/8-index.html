@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+    <head>
+
+        <meta charset="utf-8" />
+        <title>Task 0</title>
+        <script
+          src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
+          integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI="
+          crossorigin="anonymous">
+        </script>
+        <script src="https://code.jquery.com/jquery-3.6.0.js"
+        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+
+        <script type="application/javascript">
+          $(document).ready(function () {
+            createSearchForm();
+          })
+
+          function createSearchForm() {
+
+            $('body').append(`
+              <input type="text" />
+              <input type="submit" />
+              <ul></ul>
+              <ul id="pagination"><ul>
+            `);
+
+            $('input[type="submit"]').click(function (e) {
+              queryWikipedia($("input").val());
+              e.preventDefault();
+            });
+
+
+          }
+
+          function addNewArticle(id, title, snippet) {
+            $('ul').first().append(`<li class="line-content"><p><span>${id} - <b>${title}</b></span></p><p>${snippet}</p></li>`);
+          }
+
+          function queryWikipedia(search, offset=0) {
+            $.ajax({
+              type: "GET",
+              url: `https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&srsearch=${search}`,
+              dataType: 'json',
+              success: function(data) {
+                for (article of data.query.search) {
+                  addNewArticle(article.pageid, article.title, article.snippet);
+                };
+                buildPagination(data.query.searchinfo.totalhits, 10, offset);
+              },
+              error: function(e) {
+                console.log(e);
+              }
+            })
+          }
+
+          function buildPagination(numberOfItems, itemsPerPage, currentOffset) {
+            $("#pagination").empty();
+            let pageCount = numberOfItems/itemsPerPage;
+
+            for (let i = 0; i < pageCount; i++) {
+              $("#pagination").append('<li><a href="#">' + (i+1) + '</a></li>');
+            }
+
+            $("#pagination li").first().find("a").addClass("current");
+
+            showPage = function(page) {
+              $(".line-content").hide();
+              $(".line-content").each(function(n) {
+                  if (n >= pageSize * (page - 1) && n < pageSize * page)
+                      $(this).show();
+              });
+            }
+            showPage(1);
+
+            $("#pagination li a").click(function() {
+              $("#pagination li a").removeClass("current");
+              $(this).addClass("current");
+              showPage(parseInt($(this).text()))
+            });
+          }
+          </script>
+    </head>
+
+    <body>
+
+    </body>
+
+</html>
