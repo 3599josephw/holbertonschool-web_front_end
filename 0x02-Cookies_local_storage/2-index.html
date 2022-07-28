@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+    <head>
+
+        <meta charset="utf-8" />
+        <title>Task 0</title>
+        <script
+          src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
+          integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI="
+          crossorigin="anonymous">
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+        <script type="application/javascript">
+          $(document).ready(function () {
+            setUp();
+          })
+
+          function setUp() {
+            $('body').append(`<h1>Login to the website</h1>`);
+            $('body').append(`
+              <form>
+                <input id="firstname" name="firstname" type="text" placeholder="Firstname" />
+                <input id="lastname" name="lastname" type="text" placeholder="Email" />
+                <button id="login" type="submit">Log me in</button>
+              </form>`);
+              $('body').append(`<h1>Cookies</h1>`);
+              $('body').append(`<button id="cookies" type="submit">Show the cookies</button>`);
+
+              $('#login').click(function() {
+                setCookies($("input").first().val(), $("input:nth-of-type(2)").val());
+              })
+
+              $('#cookies').click(function() {
+                showCookies();
+              })
+          }
+
+          function setCookies(firstname, email) {
+            document.cookie = `firstname=${firstname}; max-age=864,000,000`;
+            document.cookie = `email=${email}; max-age=864,000,000`;
+          }
+
+          function showCookies() {
+            let p = document.createElement('p');
+            let cookies = document.cookie;
+            p.innerHTML = `Email: ${getCookie('email')} - Firstname: ${getCookie('firstname')}`;
+
+            $('body').append(p);
+          }
+
+          function getCookie(name) {
+            let cname = name + "=";
+            let ca = document.cookie.split(';');
+            for(let i = 0; i < ca.length; i++) {
+              let c = ca[i];
+              while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+              }
+              if (c.indexOf(cname) == 0) {
+                return c.substring(cname.length, c.length);
+              }
+            }
+            return "";
+
+          }
+
+        </script>
+    </head>
+
+    <body>
+
+    </body>
+
+</html>

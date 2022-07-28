@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+    <head>
+
+        <meta charset="utf-8" />
+        <title>Task 0</title>
+        <script
+          src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
+          integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI="
+          crossorigin="anonymous">
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+        <script type="application/javascript">
+          $(document).ready(function () {
+            $('body').append(`<div class="form"></div>`);
+            $('body').append(`<h1>Cookies</h1>`);
+            $('body').append(`<button id="cookies" type="submit">Show the cookies</button>`);
+
+            $('#cookies').click(function() {
+                showCookies();
+              })
+
+              showWelcomeMessageOrForm(getCookie('firstname'));
+          })
+
+          function setCookies(firstname, email) {
+            document.cookie = `firstname=${firstname}; max-age=864,000,000`;
+            document.cookie = `email=${email}; max-age=864,000,000`;
+          }
+
+          function showCookies() {
+            let p = document.createElement('p');
+            let cookies = document.cookie;
+            p.innerHTML = `Email: ${getCookie('email')} - Firstname: ${getCookie('firstname')}`;
+
+            $('body').append(p);
+          }
+
+          function getCookie(name) {
+            let cname = name + "=";
+            let ca = document.cookie.split(';');
+            for(let i = 0; i < ca.length; i++) {
+              let c = ca[i];
+              while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+              }
+              if (c.indexOf(cname) == 0) {
+                return c.substring(cname.length, c.length);
+              }
+            }
+            return "";
+          }
+
+          function showForm() {
+            $('.welcome').empty();
+            $('.form').append(`<h1>Login to the website</h1>`);
+            $('.form').append(`
+                <form>
+                  <input id="firstname" name="firstname" type="text" placeholder="Firstname" />
+                  <input id="lastname" name="lastname" type="text" placeholder="Email" />
+                  <button id="login" type="submit">Log me in</button>
+                </form>
+                `);
+
+              $('#login').click(function() {
+                setCookies($("input").first().val(), $("input:nth-of-type(2)").val());
+              })
+          }
+
+          function hideForm() {
+            $('.form').empty();
+          }
+
+          function deleteCookiesAndShowForm() {
+            document.cookie = 'firstname=; expires=Thu, 01 Jan 1900 00:00:01 GMT;';
+            document.cookie = 'email=; expires=Thu, 01 Jan 1900 00:00:01 GMT;';
+            showForm();
+          }
+
+          function showWelcomeMessageOrForm(firstname) {
+            if (!document.cookie) {
+              showForm();
+            } else {
+              hideForm()
+              $('.form').append(`<span class="welcome" style="font-weight: bold;">Welcome: ${firstname} <span id="logout" style="font-style: italic; font-weight: normal;">(logout)</span></span>`)
+            }
+
+            $('#logout').click(function () {
+              deleteCookiesAndShowForm();
+            })
+          }
+
+        </script>
+    </head>
+
+    <body>
+
+    </body>
+
+</html>

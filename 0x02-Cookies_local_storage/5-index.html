@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+    <head>
+
+        <meta charset="utf-8" />
+        <title>Task 0</title>
+        <script
+          src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
+          integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI="
+          crossorigin="anonymous">
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.1/js.cookie.js" integrity="sha512-DJw15+xxGmXB1/c6pvu2eRoVCGo5s6rdeswkFS4HLFfzNQSc6V71jk6t+eMYzlyakoLTwBrKnyhVc7SCDZOK4Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script type="application/javascript">
+          $(document).ready(function () {
+            if (localStorageTest()) {
+              createStore();
+              displayCart();
+            } else {
+              alert('Sorry, your browser does not support Web storage. Try again with a better one');
+            }
+          })
+
+          let availableItems = ['Shampoo', 'Soap', 'Sponge', 'Water'];
+
+          function localStorageTest() {
+            let test = 'test';
+            try {
+              localStorage.setItem(test, test);
+              localStorage.removeItem(test);
+              return true;
+            } catch (e) {
+              return false;
+            }
+          }
+
+            function addItemToCart(item) {
+              localStorage.setItem(item, true);
+            }
+
+            function createStore() {
+              $('body').append(`<ul></ul>`);
+              for (item of availableItems) {
+                let listItem = document.createElement('li');
+                listItem.innerHTML = item;
+                listItem.addEventListener('click', function() {
+                  addItemToCart(listItem.innerHTML);
+                })
+                $('ul').append(listItem);
+              }
+            }
+
+            function displayCart() {
+              if (localStorage.length > 0) {
+                $('body').append(`<p>You previously had ${localStorage.length} items in your cart</p>`)
+              }
+            }
+
+        </script>
+    </head>
+
+    <body>
+
+    </body>
+
+</html>
